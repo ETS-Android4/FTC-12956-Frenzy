@@ -16,7 +16,7 @@ public class basicAuto extends LinearOpMode {
     DcMotor rearRight;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
 
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -32,10 +32,10 @@ public class basicAuto extends LinearOpMode {
 
     /**
      * Sets drive train to move in x, y, and rx, for time milliseconds and then stops
-     * @param x
-     * @param y
-     * @param rx
-     * @param time
+     * @param x horizontal speed
+     * @param y vertical speed
+     * @param rx rotational speed
+     * @param time how long to apply these movements for
      */
     public void moveDrivetrain(double x, double y, double rx, int time){
         frontLeft.setPower(y + x + rx);
