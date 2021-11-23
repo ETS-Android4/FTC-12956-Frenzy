@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
- * Create by Owen Bachyrycz on 11/17/2021.
+ * Created by Owen Bachyrycz on 11/17/2021.
  */
 
 @TeleOp(name="mecanumDrive", group="default")

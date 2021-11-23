@@ -39,6 +39,7 @@ public class EasyOpenCV extends LinearOpMode {
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        /*
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -47,11 +48,10 @@ public class EasyOpenCV extends LinearOpMode {
             @Override
             public void onError(int errorCode)
             {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
+
             }
         });
+         */
         
         
         moveDrivetrain(0, 0, 0.5, 5000);
