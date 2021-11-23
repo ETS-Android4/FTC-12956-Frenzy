@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
  * Create by Owen Bachyrycz on 11/22/2021.
  */
 
-@Autonomous(name = "EasyOpenCV", group = "Testing")
+@Autonomous(name = "OpenCVTest", group = "Testing")
 
 public class EasyOpenCV extends LinearOpMode {
 
@@ -80,6 +80,4 @@ public class EasyOpenCV extends LinearOpMode {
         frontRight.setPower(0);
         rearRight.setPower(0);
     }
-
-
 }

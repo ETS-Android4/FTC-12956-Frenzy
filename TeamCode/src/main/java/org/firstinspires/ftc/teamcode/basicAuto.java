@@ -35,7 +35,7 @@ public class basicAuto extends LinearOpMode {
      * @param x horizontal speed
      * @param y vertical speed
      * @param rx rotational speed
-     * @param time how long to apply these movements for
+     * @param time how long to apply these movements for (millis)
      */
     public void moveDrivetrain(double x, double y, double rx, int time){
         frontLeft.setPower(y + x + rx);
@@ -46,6 +46,7 @@ public class basicAuto extends LinearOpMode {
         stopDrivetrain();
     }
 
+    //Stops all drivetrain motors
     public void stopDrivetrain() {
         frontLeft.setPower(0);
         rearLeft.setPower(0);
