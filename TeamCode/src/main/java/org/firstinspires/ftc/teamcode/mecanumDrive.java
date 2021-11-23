@@ -31,7 +31,7 @@ public class mecanumDrive extends OpMode {
         rearRight = hardwareMap.dcMotor.get("rearRight");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
