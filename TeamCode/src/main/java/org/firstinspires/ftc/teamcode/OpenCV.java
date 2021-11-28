@@ -5,13 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.openftc.easyopencv.*;
 
 /**
  * Created by Owen Bachyrycz on 11/28/2021.
  */
 
-public class openCV extends LinearOpMode{
+public class OpenCV extends LinearOpMode {
 
     DcMotor frontLeft;
     DcMotor rearLeft;
@@ -39,7 +41,6 @@ public class openCV extends LinearOpMode{
                 telemetry.addData("OpenCV Error: ", errorCode);
             }
         });
-
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
@@ -47,9 +48,6 @@ public class openCV extends LinearOpMode{
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        moveDrivetrain(0, 0, 0.5, 5000);
-
     }
 
     /**
@@ -76,5 +74,52 @@ public class openCV extends LinearOpMode{
         rearRight.setPower(0);
     }
 
+    public static class FrenzyPipeline extends OpenCvPipeline {
+
+        /*
+         * An enum for each position the artifact can start in
+         */
+        public enum artifactPosition {
+            LEFT,
+            MIDDLE,
+            RIGHT
+        }
+
+        static final Point FIRST_TOPLEFT_ANCHOR = new Point(200, 200);
+        static final Point SECOND_TOPLEFT_ANCHOR = new Point(600, 200);
+        static final Point THIRD_TOPLEFT_ANCHOR = new Point(1000, 200);
+
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 50;
+
+        final int DETECTION_THRESHOLD = 150;
+
+        Point first_point_a = new Point(
+                FIRST_TOPLEFT_ANCHOR.x,
+                FIRST_TOPLEFT_ANCHOR.y);
+        Point first_point_b = new Point(
+                FIRST_TOPLEFT_ANCHOR.x + REGION_WIDTH,
+                FIRST_TOPLEFT_ANCHOR.y + REGION_HEIGHT);
+
+        Point second_point_a = new Point(
+                SECOND_TOPLEFT_ANCHOR.x,
+                SECOND_TOPLEFT_ANCHOR.y);
+        Point second_point_b = new Point(
+                SECOND_TOPLEFT_ANCHOR.x + REGION_WIDTH,
+                SECOND_TOPLEFT_ANCHOR.y + REGION_HEIGHT);
+
+        Point third_point_a = new Point(
+                THIRD_TOPLEFT_ANCHOR.x,
+                THIRD_TOPLEFT_ANCHOR.y);
+        Point third_point_b = new Point(
+                THIRD_TOPLEFT_ANCHOR.x + REGION_WIDTH,
+                THIRD_TOPLEFT_ANCHOR.y + REGION_HEIGHT);
+
+
+        @Override
+        public Mat processFrame(Mat input) {
+            return null;
+        }
+    }
 
 }

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="mecanumDrive", group="default")
 
-public class mecanumDrive extends OpMode {
+public class MecanumDrive extends OpMode {
 
     //Declares motor variables
     DcMotor frontLeft;

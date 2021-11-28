@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Owen Bachyrycz on 11/17/2021.
  */
 
-public class basicAuto extends LinearOpMode {
+public class BasicAuto extends LinearOpMode {
 
     DcMotor frontLeft;
     DcMotor rearLeft;
