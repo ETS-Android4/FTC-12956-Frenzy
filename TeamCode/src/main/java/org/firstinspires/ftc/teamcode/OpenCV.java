@@ -39,12 +39,12 @@ public class OpenCV extends LinearOpMode {
             public void onOpened()
             {
                 webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPSIDE_DOWN);
-                telemetry.update();
             }
             @Override
             public void onError(int errorCode)
             {
                 telemetry.addData("OpenCV Error: ", errorCode);
+                telemetry.update();
             }
         });
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
