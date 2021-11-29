@@ -4,9 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.*;
 
 /**
@@ -34,6 +39,7 @@ public class OpenCV extends LinearOpMode {
             public void onOpened()
             {
                 webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPSIDE_DOWN);
+                telemetry.update();
             }
             @Override
             public void onError(int errorCode)
@@ -48,6 +54,36 @@ public class OpenCV extends LinearOpMode {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+
+        for(int i = 0; i < 10 && opModeIsActive(); i++)
+        {
+            telemetry.addData("Analysis", FrenzyPipeline.getAnalysis());
+            telemetry.update();
+            sleep(20);
+        }
+
+        sleep(100);
+
+        int artifactPosition = FrenzyPipeline.getAnalysis();
+
+        if(artifactPosition == 0){
+            telemetry.addData("Position: ", "RIGHT");
+            telemetry.update();
+        }
+        else if(artifactPosition == 1){
+            telemetry.addData("Position: ", "MIDDLE");
+            telemetry.update();
+        }
+        else if(artifactPosition == 2){
+            telemetry.addData("Position: ", "RIGHT");
+            telemetry.update();
+        }
+        else{
+            telemetry.addData("Position: ", "UNKNOWN");
+            telemetry.update();
+        }
     }
 
     /**
@@ -77,13 +113,15 @@ public class OpenCV extends LinearOpMode {
     public static class FrenzyPipeline extends OpenCvPipeline {
 
         /*
-         * An enum for each position the artifact can start in
-         */
         public enum artifactPosition {
             LEFT,
             MIDDLE,
             RIGHT
         }
+        */
+        static final Scalar RED = new Scalar(255, 0, 0);
+        static final Scalar GREEN = new Scalar(0, 255, 0);
+        static final Scalar BLUE = new Scalar(0, 0, 255);
 
         static final Point FIRST_TOPLEFT_ANCHOR = new Point(200, 200);
         static final Point SECOND_TOPLEFT_ANCHOR = new Point(600, 200);
@@ -91,8 +129,6 @@ public class OpenCV extends LinearOpMode {
 
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
-
-        final int DETECTION_THRESHOLD = 150;
 
         Point first_point_a = new Point(
                 FIRST_TOPLEFT_ANCHOR.x,
@@ -115,11 +151,74 @@ public class OpenCV extends LinearOpMode {
                 THIRD_TOPLEFT_ANCHOR.x + REGION_WIDTH,
                 THIRD_TOPLEFT_ANCHOR.y + REGION_HEIGHT);
 
+        Mat first_Cb;
+        Mat second_Cb;
+        Mat third_Cb;
+        Mat YCrCb = new Mat();
+        Mat Cb = new Mat();
+        int avg1;
+        int avg2;
+        int avg3;
+
+        //private volatile OpenCV.FrenzyPipeline.artifactPosition position = OpenCV.FrenzyPipeline.artifactPosition.LEFT;
+        public static int position = 0;
+
+        void inputToCb(Mat input) {
+            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+            Core.extractChannel(YCrCb, Cb, 1);
+        }
+
+        @Override
+        public void init(Mat firstFrame) {
+            inputToCb(firstFrame);
+
+            first_Cb = Cb.submat(new Rect(first_point_a, first_point_b));
+            second_Cb = Cb.submat(new Rect(second_point_a, second_point_b));
+            third_Cb = Cb.submat(new Rect(third_point_a, third_point_b));
+        }
 
         @Override
         public Mat processFrame(Mat input) {
-            return null;
+            inputToCb(input);
+
+            avg1 = (int) Core.mean(first_Cb).val[0];
+            avg2 = (int) Core.mean(second_Cb).val[0];
+            avg3 = (int) Core.mean(third_Cb).val[0];
+
+            Imgproc.rectangle(
+                    input,
+                    first_point_a,
+                    first_point_b,
+                    RED,
+                    2);
+            Imgproc.rectangle(
+                    input,
+                    second_point_a,
+                    second_point_b,
+                    GREEN,
+                    2);
+            Imgproc.rectangle(
+                    input,
+                    third_point_a,
+                    third_point_b,
+                    BLUE,
+                    2);
+
+            //position = OpenCV.FrenzyPipeline.artifactPosition.LEFT;
+            if(avg1 > avg2 && avg1 > avg3){
+                position = 0;
+            }
+            if(avg2 > avg1 && avg2 > avg3) {
+                position = 1;
+            }
+            if(avg3 > avg1 && avg3 > avg2) {
+                position = 2;
+            }
+            return input;
+        }
+
+        public static int getAnalysis() {
+            return position;
         }
     }
-
 }
