@@ -126,9 +126,9 @@ public class OpenCV extends LinearOpMode {
         static final Scalar GREEN = new Scalar(0, 255, 0);
         static final Scalar BLUE = new Scalar(0, 0, 255);
 
-        static final Point FIRST_TOPLEFT_ANCHOR = new Point(200, 200);
-        static final Point SECOND_TOPLEFT_ANCHOR = new Point(600, 200);
-        static final Point THIRD_TOPLEFT_ANCHOR = new Point(1000, 200);
+        static final Point FIRST_TOPLEFT_ANCHOR = new Point(200, 225);
+        static final Point SECOND_TOPLEFT_ANCHOR = new Point(600, 225);
+        static final Point THIRD_TOPLEFT_ANCHOR = new Point(1000, 225);
 
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
