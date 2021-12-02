@@ -94,7 +94,7 @@ public class OpenCV extends LinearOpMode {
      * @param x horizontal speed
      * @param y vertical speed
      * @param rx rotational speed
-     * @param time how long to apply these movements for (millis)
+     * @param time how long to apply these movements for (milliseconds)
      */
     public void moveDrivetrain(double x, double y, double rx, int time){
         frontLeft.setPower(y + x + rx);
