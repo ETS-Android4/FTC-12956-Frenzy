@@ -20,8 +20,6 @@ public class MagneticEncoderTest extends OpMode {
     DcMotor frontRight;
     DcMotor rearRight;
 
-    private long e1;
-
     //The power each motor should be set to
     double frontLeftPower;
     double rearLeftPower;
@@ -51,6 +49,7 @@ public class MagneticEncoderTest extends OpMode {
         double rx = gamepad1.right_stick_x;
 
         int e1 = frontLeft.getCurrentPosition();
+        double xTravel = ((double)e1 / 8192) * 38 * Math.PI;
 
         //Calculates the power that should be sent to each motor
         //based on the controller inputs.
@@ -65,7 +64,7 @@ public class MagneticEncoderTest extends OpMode {
         frontRight.setPower(frontRightPower);
         rearRight.setPower(rearRightPower);
 
-        telemetry.addData("Encoder Position: ", e1);
+        telemetry.addData("X Distance Traveled in mm: ", xTravel);
         telemetry.update();
     }
 
