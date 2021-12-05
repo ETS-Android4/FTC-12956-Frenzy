@@ -6,27 +6,25 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
- * Created by Owen Bachyrycz on 12/1/2021.
+ * Created by Owen Bachyrycz on 12/5/2021.
  */
 
 
-@TeleOp(name="FrenzyTeleOP", group="default")
+@TeleOp(name="MotorTest", group="default")
 
-public class FrenzyTeleOp extends OpMode {
+public class MotorTest extends OpMode {
 
     //Declares motor variables
     DcMotor frontLeft;
     DcMotor rearLeft;
     DcMotor frontRight;
     DcMotor rearRight;
-    DcMotor carouselMover;
 
     //The power each motor should be set to
     double frontLeftPower;
     double rearLeftPower;
     double frontRightPower;
     double rearRightPower;
-    double carouselMoverPower;
 
     @Override
     public void init() {
@@ -36,7 +34,6 @@ public class FrenzyTeleOp extends OpMode {
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
-        carouselMover = hardwareMap.dcMotor.get("carouselMover");
 
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -60,15 +57,24 @@ public class FrenzyTeleOp extends OpMode {
         frontRightPower = (y - x - rx);
         rearRightPower = (y + x -rx);
 
-        //Applies the calculated power to the motors
-        frontLeft.setPower(frontLeftPower);
-        rearLeft.setPower(rearLeftPower);
-        frontRight.setPower(frontRightPower);
-        rearRight.setPower(rearRightPower);
+        if(gamepad1.a) {
+            frontLeft.setPower(1.0);
+        }
 
-        carouselMoverPower = gamepad1.right_trigger;
-        carouselMover.setPower(carouselMoverPower);
+        if(gamepad1.b) {
+            rearLeft.setPower(1.0);
+        }
 
+        if(gamepad1.x) {
+            frontRight.setPower(1.0);
+        }
+
+        if(gamepad1.y) {
+            rearRight.setPower(1.0);
+        }
+
+
+        updatePower();
     }
 
     @Override
@@ -78,5 +84,12 @@ public class FrenzyTeleOp extends OpMode {
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
+    }
+
+    public void updatePower() {
+        frontLeft.setPower(frontLeftPower);
+        rearLeft.setPower(rearLeftPower);
+        frontRight.setPower(frontRightPower);
+        rearRight.setPower(rearRightPower);
     }
 }
