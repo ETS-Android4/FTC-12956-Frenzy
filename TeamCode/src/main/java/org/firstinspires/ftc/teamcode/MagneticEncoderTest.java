@@ -37,6 +37,8 @@ public class MagneticEncoderTest extends OpMode {
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -48,8 +50,12 @@ public class MagneticEncoderTest extends OpMode {
         double y = -gamepad1.left_stick_y;
         double rx = gamepad1.right_stick_x;
 
-        int e1 = frontLeft.getCurrentPosition();
-        double xTravel = ((double)e1 / 8192) * 38 * Math.PI;
+        int enc0 = frontLeft.getCurrentPosition();
+        double enc0mm = ((double)enc0 / 8192) * 38 * Math.PI;
+        int enc1 = rearLeft.getCurrentPosition();
+        double enc1mm = ((double)enc1 / 8192) * 38 * Math.PI;
+        int enc2 = frontRight.getCurrentPosition();
+        double enc2mm = ((double)enc2 / 8192) * 38 * Math.PI;
 
         //Calculates the power that should be sent to each motor
         //based on the controller inputs.
@@ -64,7 +70,9 @@ public class MagneticEncoderTest extends OpMode {
         frontRight.setPower(frontRightPower);
         rearRight.setPower(rearRightPower);
 
-        telemetry.addData("X Distance Traveled in mm: ", xTravel);
+        telemetry.addData("Left Encoder Travel (mm): ", enc0mm);
+        telemetry.addData("Middle Encoder Travel (mm): ", enc1mm);
+        telemetry.addData("Right Encoder Travel (mm): ", enc2mm);
         telemetry.update();
     }
 
