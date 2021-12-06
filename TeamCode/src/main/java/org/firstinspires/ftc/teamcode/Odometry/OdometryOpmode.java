@@ -6,18 +6,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Odometry.OdometryGlobalCoordinatePosition;
 
-@TeleOp(name = "My Odometry OpMode")
-public class MyOdometryOpmode extends LinearOpMode {
+@TeleOp(name = "OdometryOpMode")
+public class OdometryOpmode extends LinearOpMode {
     //Drive motors
     DcMotor right_front, right_back, left_front, left_back;
     //Odometry Wheels
     DcMotor verticalLeft, verticalRight, horizontal;
 
-    final double COUNTS_PER_INCH = 307.699557;
+    final double COUNTS_PER_INCH = 8192.0 / ((38.0 / 25.4) * Math.PI);
 
     //Hardware Map Names for drive motors and odometry wheels. THIS WILL CHANGE ON EACH ROBOT, YOU NEED TO UPDATE THESE VALUES ACCORDINGLY
-    String rfName = "rf", rbName = "rb", lfName = "lf", lbName = "lb";
-    String verticalLeftEncoderName = rbName, verticalRightEncoderName = lfName, horizontalEncoderName = rfName;
+    String rfName = "frontRight", rbName = "rearRight", lfName = "frontLeft", lbName = "rearLeft";
+    String verticalLeftEncoderName = lfName, verticalRightEncoderName = rfName, horizontalEncoderName = lbName;
 
     OdometryGlobalCoordinatePosition globalPositionUpdate;
 
@@ -37,17 +37,17 @@ public class MyOdometryOpmode extends LinearOpMode {
 
         globalPositionUpdate.reverseRightEncoder();
         globalPositionUpdate.reverseNormalEncoder();
+        globalPositionUpdate.reverseLeftEncoder();
+
+        goToPosition(0, 12, 0.2, 0, 0.5);
+        goToPosition(12, 12, 0.2, 45, 0.5);
+        goToPosition(0, 0, 0.2, 0, 0.5);
 
         while(opModeIsActive()){
             //Display Global (x, y, theta) coordinates
             telemetry.addData("X Position", globalPositionUpdate.returnXCoordinate() / COUNTS_PER_INCH);
             telemetry.addData("Y Position", globalPositionUpdate.returnYCoordinate() / COUNTS_PER_INCH);
             telemetry.addData("Orientation (Degrees)", globalPositionUpdate.returnOrientation());
-
-            telemetry.addData("Vertical left encoder position", verticalLeft.getCurrentPosition());
-            telemetry.addData("Vertical right encoder position", verticalRight.getCurrentPosition());
-            telemetry.addData("horizontal encoder position", horizontal.getCurrentPosition());
-
             telemetry.addData("Thread Active", positionThread.isAlive());
             telemetry.update();
         }
@@ -55,6 +55,62 @@ public class MyOdometryOpmode extends LinearOpMode {
         //Stop the thread
         globalPositionUpdate.stop();
 
+    }
+
+    public void goToPosition(double targetX, double targetY, double power, double targetOrientation, double accuracy) {
+        targetX *= COUNTS_PER_INCH;
+        targetY *= COUNTS_PER_INCH;
+        accuracy *= COUNTS_PER_INCH;
+        double distanceToX = targetX - globalPositionUpdate.returnXCoordinate();
+        double distanceToY = targetY - globalPositionUpdate.returnYCoordinate();
+
+        double distance = Math.hypot(distanceToX, distanceToY);
+
+        while(opModeIsActive() && distance > accuracy) {
+            distanceToX = targetX - globalPositionUpdate.returnXCoordinate();
+            distanceToY = targetY - globalPositionUpdate.returnYCoordinate();
+            distance = Math.hypot(distanceToX, distanceToY);
+
+            double robotMovementAngle = Math.toDegrees(Math.atan2(distanceToX, distanceToY));
+
+            double robotMovementX = calculateX(robotMovementAngle, power);
+            double robotMovementY = calculateY(robotMovementAngle, power);
+            double pivotCorrection = targetOrientation - globalPositionUpdate.returnOrientation();
+            double pivotPower = pivotCorrection / 90;
+            if(pivotCorrection >= 90) {
+                pivotPower = 0.5;
+            }
+            else if(pivotCorrection < 90 && pivotCorrection >= 45) {
+                pivotPower = 0.3;
+            }
+            else if(pivotCorrection < 45 && pivotCorrection >= 10) {
+                pivotPower = 0.2;
+            }
+            else {
+                pivotCorrection = 0.1;
+            }
+            telemetry.addData("Movement x: ", robotMovementX);
+            telemetry.addData("Movement Y: ", robotMovementY);
+            telemetry.addData("Rotation Correction: ", pivotCorrection);
+            telemetry.addData("Distance to Point: ", distance);
+            telemetry.update();
+            moveDrivetrain(robotMovementX, robotMovementY, pivotPower);
+        }
+        stopDrivetrain();
+    }
+
+    public void moveDrivetrain(double x, double y, double rx) {
+        left_front.setPower(y + x + rx);
+        left_back.setPower(y - x + rx);
+        right_front.setPower(y - x - rx);
+        right_back.setPower(y + x -rx);
+    }
+
+    public void stopDrivetrain() {
+        left_front.setPower(0);
+        left_back.setPower(0);
+        right_front.setPower(0);
+        right_back.setPower(0);
     }
 
     private void initDriveHardwareMap(String rfName, String rbName, String lfName, String lbName, String vlEncoderName, String vrEncoderName, String hEncoderName){
@@ -92,8 +148,7 @@ public class MyOdometryOpmode extends LinearOpMode {
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         left_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_back.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.addData("Status", "Hardware Map Init Complete");
         telemetry.update();
