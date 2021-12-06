@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Odometry;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,22 +9,22 @@ import org.firstinspires.ftc.teamcode.Odometry.OdometryGlobalCoordinatePosition;
 @TeleOp(name = "OdometryOpMode")
 public class OdometryOpmode extends LinearOpMode {
     //Drive motors
-    DcMotor right_front, right_back, left_front, left_back;
-    //Odometry Wheels
+    DcMotor frontRight, rearRight, frontLeft, rearLeft;
+    //Encoders
     DcMotor verticalLeft, verticalRight, horizontal;
 
     final double COUNTS_PER_INCH = 8192.0 / ((38.0 / 25.4) * Math.PI);
 
     //Hardware Map Names for drive motors and odometry wheels. THIS WILL CHANGE ON EACH ROBOT, YOU NEED TO UPDATE THESE VALUES ACCORDINGLY
-    String rfName = "frontRight", rbName = "rearRight", lfName = "frontLeft", lbName = "rearLeft";
-    String verticalLeftEncoderName = lfName, verticalRightEncoderName = rfName, horizontalEncoderName = lbName;
+    String frontRightName = "frontRight", rearRightName = "rearRight", frontLeftName = "frontLeft", rearLeftName = "rearLeft";
+    String verticalLeftEncoderName = frontLeftName, verticalRightEncoderName = frontRightName, horizontalEncoderName = rearLeftName;
 
     OdometryGlobalCoordinatePosition globalPositionUpdate;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        initDriveHardwareMap(rfName, rbName, lfName, lbName, verticalLeftEncoderName, verticalRightEncoderName, horizontalEncoderName);
+        initDriveHardwareMap(frontRightName, rearRightName, frontLeftName, rearLeftName, verticalLeftEncoderName, verticalRightEncoderName, horizontalEncoderName);
 
         telemetry.addData("Status", "Init Complete");
         telemetry.update();
@@ -100,38 +100,38 @@ public class OdometryOpmode extends LinearOpMode {
     }
 
     public void moveDrivetrain(double x, double y, double rx) {
-        left_front.setPower(y + x + rx);
-        left_back.setPower(y - x + rx);
-        right_front.setPower(y - x - rx);
-        right_back.setPower(y + x -rx);
+        frontLeft.setPower(y + x + rx);
+        rearLeft.setPower(y - x + rx);
+        frontRight.setPower(y - x - rx);
+        rearRight.setPower(y + x -rx);
     }
 
     public void stopDrivetrain() {
-        left_front.setPower(0);
-        left_back.setPower(0);
-        right_front.setPower(0);
-        right_back.setPower(0);
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        frontRight.setPower(0);
+        rearRight.setPower(0);
     }
 
-    private void initDriveHardwareMap(String rfName, String rbName, String lfName, String lbName, String vlEncoderName, String vrEncoderName, String hEncoderName){
-        right_front = hardwareMap.dcMotor.get(rfName);
-        right_back = hardwareMap.dcMotor.get(rbName);
-        left_front = hardwareMap.dcMotor.get(lfName);
-        left_back = hardwareMap.dcMotor.get(lbName);
+    private void initDriveHardwareMap(String frontRightName, String rearRightName, String frontLeftName, String rearLeftName, String vlEncoderName, String vrEncoderName, String hEncoderName){
+        frontRight = hardwareMap.dcMotor.get(frontRightName);
+        rearRight = hardwareMap.dcMotor.get(rearRightName);
+        frontLeft = hardwareMap.dcMotor.get(frontLeftName);
+        rearLeft = hardwareMap.dcMotor.get(rearLeftName);
 
         verticalLeft = hardwareMap.dcMotor.get(vlEncoderName);
         verticalRight = hardwareMap.dcMotor.get(vrEncoderName);
         horizontal = hardwareMap.dcMotor.get(hEncoderName);
 
-        right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        right_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_back.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left_back.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         verticalLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         verticalRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -142,13 +142,13 @@ public class OdometryOpmode extends LinearOpMode {
         horizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        left_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_back.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.addData("Status", "Hardware Map Init Complete");
         telemetry.update();

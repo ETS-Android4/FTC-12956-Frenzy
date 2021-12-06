@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
- * Created by Owen Bachyrycz on 11/17/2021.
+ * Created by Owen Bachyrycz on 12/1/2021.
  */
 
-@TeleOp(name="mecanumDrive", group="default")
+@TeleOp(name="MagneticEncoderTest", group="default")
 
-public class MecanumDrive extends OpMode {
+public class MagneticEncoderTest extends OpMode {
 
     //Declares motor variables
     DcMotor frontLeft;
@@ -35,6 +36,9 @@ public class MecanumDrive extends OpMode {
 
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -45,6 +49,13 @@ public class MecanumDrive extends OpMode {
         double x = gamepad1.left_stick_x;
         double y = -gamepad1.left_stick_y;
         double rx = gamepad1.right_stick_x;
+
+        int enc0 = frontLeft.getCurrentPosition();
+        double enc0mm = ((double)enc0 / 8192) * 38 * Math.PI;
+        int enc1 = rearLeft.getCurrentPosition();
+        double enc1mm = ((double)enc1 / 8192) * 38 * Math.PI;
+        int enc2 = frontRight.getCurrentPosition();
+        double enc2mm = ((double)enc2 / 8192) * 38 * Math.PI;
 
         //Calculates the power that should be sent to each motor
         //based on the controller inputs.
@@ -58,6 +69,11 @@ public class MecanumDrive extends OpMode {
         rearLeft.setPower(rearLeftPower);
         frontRight.setPower(frontRightPower);
         rearRight.setPower(rearRightPower);
+
+        telemetry.addData("Left Encoder Travel (mm): ", enc0mm);
+        telemetry.addData("Middle Encoder Travel (mm): ", enc1mm);
+        telemetry.addData("Right Encoder Travel (mm): ", enc2mm);
+        telemetry.update();
     }
 
     @Override

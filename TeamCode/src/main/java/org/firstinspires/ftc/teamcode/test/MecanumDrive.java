@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
- * Created by Owen Bachyrycz on 12/5/2021.
+ * Created by Owen Bachyrycz on 11/17/2021.
  */
 
+@TeleOp(name="mecanumDrive", group="default")
 
-@TeleOp(name="MotorTest", group="default")
-
-public class MotorTest extends OpMode {
+public class MecanumDrive extends OpMode {
 
     //Declares motor variables
     DcMotor frontLeft;
@@ -28,7 +27,6 @@ public class MotorTest extends OpMode {
 
     @Override
     public void init() {
-
         //Initializes the motors and assigns them to a motor in the hardwareMap
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -37,8 +35,6 @@ public class MotorTest extends OpMode {
 
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
 
     @Override
@@ -57,24 +53,11 @@ public class MotorTest extends OpMode {
         frontRightPower = (y - x - rx);
         rearRightPower = (y + x -rx);
 
-        if(gamepad1.a) {
-            frontLeft.setPower(1.0);
-        }
-
-        if(gamepad1.b) {
-            rearLeft.setPower(1.0);
-        }
-
-        if(gamepad1.x) {
-            frontRight.setPower(1.0);
-        }
-
-        if(gamepad1.y) {
-            rearRight.setPower(1.0);
-        }
-
-
-        updatePower();
+        //Applies the calculated power to the motors
+        frontLeft.setPower(frontLeftPower);
+        rearLeft.setPower(rearLeftPower);
+        frontRight.setPower(frontRightPower);
+        rearRight.setPower(rearRightPower);
     }
 
     @Override
@@ -84,12 +67,5 @@ public class MotorTest extends OpMode {
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
-    }
-
-    public void updatePower() {
-        frontLeft.setPower(frontLeftPower);
-        rearLeft.setPower(rearLeftPower);
-        frontRight.setPower(frontRightPower);
-        rearRight.setPower(rearRightPower);
     }
 }

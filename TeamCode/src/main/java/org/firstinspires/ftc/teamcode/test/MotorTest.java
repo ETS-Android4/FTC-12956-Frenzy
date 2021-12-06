@@ -1,18 +1,18 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
- * Created by Owen Bachyrycz on 12/1/2021.
+ * Created by Owen Bachyrycz on 12/5/2021.
  */
 
-@TeleOp(name="MagneticEncoderTest", group="default")
 
-public class MagneticEncoderTest extends OpMode {
+@TeleOp(name="MotorTest", group="default")
+
+public class MotorTest extends OpMode {
 
     //Declares motor variables
     DcMotor frontLeft;
@@ -28,6 +28,7 @@ public class MagneticEncoderTest extends OpMode {
 
     @Override
     public void init() {
+
         //Initializes the motors and assigns them to a motor in the hardwareMap
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -36,9 +37,8 @@ public class MagneticEncoderTest extends OpMode {
 
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     @Override
@@ -50,13 +50,6 @@ public class MagneticEncoderTest extends OpMode {
         double y = -gamepad1.left_stick_y;
         double rx = gamepad1.right_stick_x;
 
-        int enc0 = frontLeft.getCurrentPosition();
-        double enc0mm = ((double)enc0 / 8192) * 38 * Math.PI;
-        int enc1 = rearLeft.getCurrentPosition();
-        double enc1mm = ((double)enc1 / 8192) * 38 * Math.PI;
-        int enc2 = frontRight.getCurrentPosition();
-        double enc2mm = ((double)enc2 / 8192) * 38 * Math.PI;
-
         //Calculates the power that should be sent to each motor
         //based on the controller inputs.
         frontLeftPower = (y + x + rx);
@@ -64,16 +57,24 @@ public class MagneticEncoderTest extends OpMode {
         frontRightPower = (y - x - rx);
         rearRightPower = (y + x -rx);
 
-        //Applies the calculated power to the motors
-        frontLeft.setPower(frontLeftPower);
-        rearLeft.setPower(rearLeftPower);
-        frontRight.setPower(frontRightPower);
-        rearRight.setPower(rearRightPower);
+        if(gamepad1.a) {
+            frontLeft.setPower(1.0);
+        }
 
-        telemetry.addData("Left Encoder Travel (mm): ", enc0mm);
-        telemetry.addData("Middle Encoder Travel (mm): ", enc1mm);
-        telemetry.addData("Right Encoder Travel (mm): ", enc2mm);
-        telemetry.update();
+        if(gamepad1.b) {
+            rearLeft.setPower(1.0);
+        }
+
+        if(gamepad1.x) {
+            frontRight.setPower(1.0);
+        }
+
+        if(gamepad1.y) {
+            rearRight.setPower(1.0);
+        }
+
+
+        updatePower();
     }
 
     @Override
@@ -83,5 +84,12 @@ public class MagneticEncoderTest extends OpMode {
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
+    }
+
+    public void updatePower() {
+        frontLeft.setPower(frontLeftPower);
+        rearLeft.setPower(rearLeftPower);
+        frontRight.setPower(frontRightPower);
+        rearRight.setPower(rearRightPower);
     }
 }
