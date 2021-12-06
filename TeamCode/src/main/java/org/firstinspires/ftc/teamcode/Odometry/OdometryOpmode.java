@@ -23,7 +23,7 @@ public class OdometryOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //Initialize hardware map values. PLEASE UPDATE THESE VALUES TO MATCH YOUR CONFIGURATION
+
         initDriveHardwareMap(rfName, rbName, lfName, lbName, verticalLeftEncoderName, verticalRightEncoderName, horizontalEncoderName);
 
         telemetry.addData("Status", "Init Complete");
@@ -40,7 +40,7 @@ public class OdometryOpmode extends LinearOpMode {
         globalPositionUpdate.reverseLeftEncoder();
 
         goToPosition(0, 12, 0.2, 0, 0.5);
-        goToPosition(12, 12, 0.2, 45, 0.5);
+        goToPosition(12, 12, 0.2, 0, 0.5);
         goToPosition(0, 0, 0.2, 0, 0.5);
 
         while(opModeIsActive()){
