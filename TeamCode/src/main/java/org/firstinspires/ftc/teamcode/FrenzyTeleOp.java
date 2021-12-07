@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Owen Bachyrycz on 12/1/2021.
  */
 
-
 @TeleOp(name="FrenzyTeleOP", group="default")
 
 public class FrenzyTeleOp extends OpMode {
