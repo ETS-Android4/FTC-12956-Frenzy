@@ -20,13 +20,13 @@ public class FrenzyTeleOp extends OpMode {
     DcMotor frontRight;
     DcMotor rearRight;
     DcMotor carouselMover;
+    DcMotor liftSpool;
 
     //The power each motor should be set to
     double frontLeftPower;
     double rearLeftPower;
     double frontRightPower;
     double rearRightPower;
-    double carouselMoverPower;
 
     @Override
     public void init() {
@@ -37,6 +37,8 @@ public class FrenzyTeleOp extends OpMode {
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
         carouselMover = hardwareMap.dcMotor.get("carouselMover");
+        liftSpool = hardwareMap.dcMotor.get("liftSpool");
+
 
         //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -66,8 +68,22 @@ public class FrenzyTeleOp extends OpMode {
         frontRight.setPower(frontRightPower);
         rearRight.setPower(rearRightPower);
 
-        carouselMoverPower = gamepad1.right_trigger;
-        carouselMover.setPower(carouselMoverPower);
+        if(gamepad1.a) {
+            carouselMover.setPower(1);
+        }
+        else {
+            carouselMover.setPower(0);
+        }
+
+        if(gamepad1.left_trigger > 0) {
+            liftSpool.setPower(-(gamepad1.left_trigger / 2));
+        }
+        else if(gamepad1.right_trigger > 0) {
+            liftSpool.setPower(gamepad1.right_trigger / 2);
+        }
+        else {
+            liftSpool.setPower(0);
+        }
 
     }
 
