@@ -38,8 +38,6 @@ public class FrenzyTeleOp extends OpMode {
         carouselMover = hardwareMap.dcMotor.get("carouselMover");
         liftSpool = hardwareMap.dcMotor.get("liftSpool");
 
-
-        //Reverses the front left motor
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 

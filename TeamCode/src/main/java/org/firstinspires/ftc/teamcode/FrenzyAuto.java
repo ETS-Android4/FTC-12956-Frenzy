@@ -2,41 +2,62 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.test.OpenCVExample;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.*;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
 
-/**
- * Created by Owen Bachyrycz on 11/28/2021.
- */
+@Autonomous(name = "FrenzyAuto", group = "default")
 
-@Autonomous(name = "OpenCV", group = "default")
+public class FrenzyAuto extends LinearOpMode {
 
-public class OpenCV extends LinearOpMode {
-
+    //Motor variables
     DcMotor frontLeft;
     DcMotor rearLeft;
     DcMotor frontRight;
     DcMotor rearRight;
+    DcMotor carouselMover;
+    DcMotor liftSpool;
+
+    //Drivetrain speed variables
+    double frontLeftPower;
+    double rearLeftPower;
+    double frontRightPower;
+    double rearRightPower;
 
     OpenCvCamera webcam;
     FrenzyPipeline pipeline;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
+        //Initializes the motors and assigns them to a motor in the hardwareMap
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        rearLeft = hardwareMap.dcMotor.get("rearLeft");
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        rearRight = hardwareMap.dcMotor.get("rearRight");
+        carouselMover = hardwareMap.dcMotor.get("carouselMover");
+        liftSpool = hardwareMap.dcMotor.get("liftSpool");
+
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftSpool.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Initializes webcam and computer vision pipeline
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
+        pipeline = new FrenzyPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -52,33 +73,39 @@ public class OpenCV extends LinearOpMode {
                 telemetry.update();
             }
         });
-        pipeline = new FrenzyPipeline();
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        rearLeft = hardwareMap.dcMotor.get("rearLeft");
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        rearRight = hardwareMap.dcMotor.get("rearRight");
-
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
+        /*
+        int timer = 0;
+        while (opModeIsActive() && timer < 10) {
 
-        for(int i = 0; i < 10 && opModeIsActive(); i++)
-        {
             telemetry.addData("Avg1: ", pipeline.avg1);
-            telemetry.addData("Avg2: ", pipeline.avg2);
-            telemetry.addData("Avg3: ", pipeline.avg3);
-            telemetry.addData("Analysis", pipeline.getPosition());
+            telemetry.addData("Avg2: ", pipeline.getAvg2());
+            telemetry.addData("Avg3: ", pipeline.getAvg3());
+            telemetry.addData("Position", pipeline.getPosition());
             telemetry.update();
-            sleep(200);
-        }
 
+            sleep(50);
+            timer++;
+        }
+         */
+
+        for(int i = 0; i < 50 && opModeIsActive(); i++) {
+            telemetry.addData("Avg1: ", pipeline.getAvg1());
+            telemetry.addData("Avg2: ", pipeline.getAvg2());
+            telemetry.addData("Avg3: ", pipeline.getAvg3());
+            telemetry.addData("Position", pipeline.position);
+            telemetry.update();
+            sleep(20);
+        }
+        int artifactPosition = pipeline.getPosition();
         sleep(100);
 
-        int artifactPosition = pipeline.getPosition();
+        telemetry.addData("Temp Position: ", artifactPosition);
+        sleep(1000);
 
         if(artifactPosition == 0){
-            telemetry.addData("Position: ", "RIGHT");
+            telemetry.addData("Position: ", "LEFT");
             telemetry.update();
         }
         else if(artifactPosition == 1){
@@ -88,6 +115,9 @@ public class OpenCV extends LinearOpMode {
         else if(artifactPosition == 2){
             telemetry.addData("Position: ", "RIGHT");
             telemetry.update();
+            carouselMover.setPower(1);
+            sleep(1000);
+            carouselMover.setPower(0);
         }
         else{
             telemetry.addData("Position: ", "UNKNOWN");
@@ -95,30 +125,31 @@ public class OpenCV extends LinearOpMode {
         }
     }
 
-    /**
-     * Sets drive train to move in x, y, and rx, for time milliseconds and then stops
-     * @param x horizontal speed
-     * @param y vertical speed
-     * @param rx rotational speed
-     * @param time how long to apply these movements for (milliseconds)
-     */
-    public void moveDrivetrain(double x, double y, double rx, int time){
-        frontLeft.setPower(y + x + rx);
-        rearLeft.setPower(y - x + rx);
-        frontRight.setPower(y - x - rx);
-        rearRight.setPower(y + x -rx);
-        sleep(time);
-        stopDrivetrain();
+    public void leftRoute() {
+
     }
 
-    //Stops all drivetrain motors
-    public void stopDrivetrain() {
-        frontLeft.setPower(0);
-        rearLeft.setPower(0);
-        frontRight.setPower(0);
-        rearRight.setPower(0);
+    public void middleRoute() {
+
     }
 
+    public void rightRoute() {
+
+    }
+
+    public void moveDrivetrain(double x, double y, double rx) {
+
+        frontLeftPower = (y + x + rx);
+        rearLeftPower = (y - x + rx);
+        frontRightPower = (y - x - rx);
+        rearRightPower = (y + x -rx);
+
+        frontLeft.setPower(frontLeftPower);
+        rearLeft.setPower(rearLeftPower);
+        frontRight.setPower(frontRightPower);
+        rearRight.setPower(rearRightPower);
+
+    }
 
     public static class FrenzyPipeline extends OpenCvPipeline
     {
