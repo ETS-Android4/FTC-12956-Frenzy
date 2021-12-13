@@ -151,8 +151,8 @@ public class FrenzyAuto extends LinearOpMode {
 
     }
 
-    public static class FrenzyPipeline extends OpenCvPipeline
-    {
+    public static class FrenzyPipeline extends OpenCvPipeline {
+
         /*
          * Some color constants
          */
@@ -204,15 +204,13 @@ public class FrenzyAuto extends LinearOpMode {
         //private volatile RingPosition position = RingPosition.FOUR;
         private int position = 0;
 
-        void inputToCb(Mat input)
-        {
+        void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 1);
         }
 
         @Override
-        public void init(Mat firstFrame)
-        {
+        public void init(Mat firstFrame) {
             inputToCb(firstFrame);
 
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
@@ -221,8 +219,7 @@ public class FrenzyAuto extends LinearOpMode {
         }
 
         @Override
-        public Mat processFrame(Mat input)
-        {
+        public Mat processFrame(Mat input) {
             inputToCb(input);
 
             avg1 = (int) Core.mean(region1_Cb).val[0];
@@ -288,18 +285,15 @@ public class FrenzyAuto extends LinearOpMode {
             return position;
         }
 
-        public int getAvg1()
-        {
+        public int getAvg1() {
             return avg1;
         }
 
-        public int getAvg2()
-        {
+        public int getAvg2() {
             return avg2;
         }
 
-        public int getAvg3()
-        {
+        public int getAvg3() {
             return avg3;
         }
     }

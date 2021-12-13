@@ -29,7 +29,6 @@ public class FrenzyTeleOp extends OpMode {
 
     @Override
     public void init() {
-
         //Initializes the motors and assigns them to a motor in the hardwareMap
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -40,12 +39,10 @@ public class FrenzyTeleOp extends OpMode {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
 
     @Override
     public void loop() {
-
         //Takes input from controller joysticks and assigns them to
         //variables x, y, and rx
         double x = gamepad1.left_stick_x;
@@ -66,7 +63,7 @@ public class FrenzyTeleOp extends OpMode {
         rearRight.setPower(rearRightPower);
 
         if(gamepad1.a) {
-            carouselMover.setPower(1);
+            carouselMover.setPower(0.5);
         }
         else {
             carouselMover.setPower(0);
@@ -81,7 +78,6 @@ public class FrenzyTeleOp extends OpMode {
         else {
             liftSpool.setPower(0);
         }
-
     }
 
     @Override

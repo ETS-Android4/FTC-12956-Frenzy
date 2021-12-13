@@ -111,7 +111,6 @@ public class OpenCVExample extends LinearOpMode
         int avg2;
         int avg3;
 
-        //private volatile RingPosition position = RingPosition.FOUR;
         private int position = 0;
 
         void inputToCb(Mat input)
@@ -140,25 +139,25 @@ public class OpenCVExample extends LinearOpMode
             avg3 = (int) Core.mean(region3_Cb).val[0];
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region1_pointA, // First point which defines the rectangle
-                    region1_pointB, // Second point which defines the rectangle
-                    DARK_RED, // The color the rectangle is drawn in
-                    8); // Thickness of the rectangle lines
+                    input,
+                    region1_pointA,
+                    region1_pointB,
+                    DARK_RED,
+                    8);
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region2_pointA, // First point which defines the rectangle
-                    region2_pointB, // Second point which defines the rectangle
-                    DARK_GREEN, // The color the rectangle is drawn in
-                    8); // Thickness of the rectangle lines
+                    input,
+                    region2_pointA,
+                    region2_pointB,
+                    DARK_GREEN,
+                    8);
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region3_pointA, // First point which defines the rectangle
-                    region3_pointB, // Second point which defines the rectangle
-                    DARK_BLUE, // The color the rectangle is drawn in
-                    8); // Thickness of the rectangle lines
+                    input,
+                    region3_pointA,
+                    region3_pointB,
+                    DARK_BLUE,
+                    8);
 
             if(avg1 > avg2 && avg1 > avg3) {
                 position = 0;
@@ -171,25 +170,25 @@ public class OpenCVExample extends LinearOpMode
             }
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region1_pointA, // First point which defines the rectangle
-                    region1_pointB, // Second point which defines the rectangle
-                    RED, // The color the rectangle is drawn in
-                    -1); // Negative thickness means solid fill
+                    input,
+                    region1_pointA,
+                    region1_pointB,
+                    RED,
+                    -1);
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region2_pointA, // First point which defines the rectangle
-                    region2_pointB, // Second point which defines the rectangle
-                    GREEN, // The color the rectangle is drawn in
-                    -1); // Negative thickness means solid fill
+                    input,
+                    region2_pointA,
+                    region2_pointB,
+                    GREEN,
+                    -1);
 
             Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region3_pointA, // First point which defines the rectangle
-                    region3_pointB, // Second point which defines the rectangle
-                    BLUE, // The color the rectangle is drawn in
-                    -1); // Negative thickness means solid fill
+                    input,
+                    region3_pointA,
+                    region3_pointB,
+                    BLUE,
+                    -1);
 
             return input;
         }
