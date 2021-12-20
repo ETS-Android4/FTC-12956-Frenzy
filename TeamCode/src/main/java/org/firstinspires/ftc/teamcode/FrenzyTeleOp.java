@@ -66,18 +66,17 @@ public class FrenzyTeleOp extends OpMode {
 
         if(gamepad1.a) {
             carouselMover.setPower(0.5);
-        }
-        else {
+        } else if (gamepad1.b){
+            carouselMover.setPower(-0.5);
+        } else {
             carouselMover.setPower(0);
         }
 
         if(gamepad1.left_trigger > 0) {
             liftSpool.setPower(-(gamepad1.left_trigger / 2));
-        }
-        else if(gamepad1.right_trigger > 0) {
+        } else if(gamepad1.right_trigger > 0) {
             liftSpool.setPower(gamepad1.right_trigger / 2);
-        }
-        else {
+        } else {
             liftSpool.setPower(0);
         }
     }
