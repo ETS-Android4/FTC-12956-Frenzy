@@ -20,6 +20,7 @@ public class FrenzyTeleOp extends OpMode {
     DcMotor rearRight;
     DcMotor carouselMover;
     DcMotor liftSpool;
+    DcMotor intake;
 
     //The power each motor should be set to
     double frontLeftPower;
@@ -36,6 +37,7 @@ public class FrenzyTeleOp extends OpMode {
         rearRight = hardwareMap.dcMotor.get("rearRight");
         carouselMover = hardwareMap.dcMotor.get("carouselMover");
         liftSpool = hardwareMap.dcMotor.get("liftSpool");
+        intake = hardwareMap.dcMotor.get("intakeMotor");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -87,5 +89,6 @@ public class FrenzyTeleOp extends OpMode {
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
+        intake.setPower(0);
     }
 }

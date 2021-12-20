@@ -75,20 +75,6 @@ public class FrenzyAuto extends LinearOpMode {
         });
 
         waitForStart();
-        /*
-        int timer = 0;
-        while (opModeIsActive() && timer < 10) {
-
-            telemetry.addData("Avg1: ", pipeline.avg1);
-            telemetry.addData("Avg2: ", pipeline.getAvg2());
-            telemetry.addData("Avg3: ", pipeline.getAvg3());
-            telemetry.addData("Position", pipeline.getPosition());
-            telemetry.update();
-
-            sleep(50);
-            timer++;
-        }
-         */
 
         for(int i = 0; i < 50 && opModeIsActive(); i++) {
             telemetry.addData("Avg1: ", pipeline.getAvg1());
@@ -201,7 +187,6 @@ public class FrenzyAuto extends LinearOpMode {
         int avg2;
         int avg3;
 
-        //private volatile RingPosition position = RingPosition.FOUR;
         private int position = 0;
 
         void inputToCb(Mat input) {
