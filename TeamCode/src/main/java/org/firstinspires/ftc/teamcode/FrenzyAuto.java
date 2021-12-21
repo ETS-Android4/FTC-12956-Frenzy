@@ -30,6 +30,7 @@ public class FrenzyAuto extends LinearOpMode {
     DcMotor rearRight;
     DcMotor carouselMover;
     DcMotor liftSpool;
+    DcMotor intakeMotor;
 
     //Encoders
     DcMotor verticalLeft, verticalRight, horizontal;
@@ -58,6 +59,7 @@ public class FrenzyAuto extends LinearOpMode {
         rearRight = hardwareMap.dcMotor.get("rearRight");
         carouselMover = hardwareMap.dcMotor.get("carouselMover");
         liftSpool = hardwareMap.dcMotor.get("liftSpool");
+        intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -265,7 +267,7 @@ public class FrenzyAuto extends LinearOpMode {
             else if(avg3 > avg1 && avg3 > avg2) {
                 position = 2;
             }
-
+            /*
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region1_pointA, // First point which defines the rectangle
@@ -286,6 +288,7 @@ public class FrenzyAuto extends LinearOpMode {
                     region3_pointB, // Second point which defines the rectangle
                     BLUE, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
+             */
 
             return input;
         }

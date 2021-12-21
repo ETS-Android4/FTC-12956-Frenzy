@@ -76,9 +76,9 @@ public class OpenCVExample extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(245,310);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(590,310);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(935,310);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(275,320);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(800,320);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1180,320);
 
         static final int REGION_WIDTH = 100;
         static final int REGION_HEIGHT = 100;
@@ -168,7 +168,7 @@ public class OpenCVExample extends LinearOpMode
             else if(avg3 > avg1 && avg3 > avg2) {
                 position = 2;
             }
-
+            /*
             Imgproc.rectangle(
                     input,
                     region1_pointA,
@@ -189,6 +189,8 @@ public class OpenCVExample extends LinearOpMode
                     region3_pointB,
                     BLUE,
                     -1);
+
+             */
 
             return input;
         }
