@@ -176,9 +176,9 @@ public class FrenzyAuto extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(225,320);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(640,320);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1100,320);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(275,320);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(800,320);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1180,320);
 
         static final int REGION_WIDTH = 100;
         static final int REGION_HEIGHT = 100;
