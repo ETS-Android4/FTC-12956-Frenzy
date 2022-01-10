@@ -76,19 +76,8 @@ public class OdometryOpmode extends LinearOpMode {
             double robotMovementX = calculateX(robotMovementAngle, power);
             double robotMovementY = calculateY(robotMovementAngle, power);
             double pivotCorrection = targetOrientation - globalPositionUpdate.returnOrientation();
-            double pivotPower = pivotCorrection / 90;
-            if(pivotCorrection >= 90) {
-                pivotPower = 0.5;
-            }
-            else if(pivotCorrection < 90 && pivotCorrection >= 45) {
-                pivotPower = 0.3;
-            }
-            else if(pivotCorrection < 45 && pivotCorrection >= 10) {
-                pivotPower = 0.2;
-            }
-            else {
-                pivotCorrection = 0.1;
-            }
+            double pivotPower = (pivotCorrection / 180) * 0.5;
+
             telemetry.addData("Movement x: ", robotMovementX);
             telemetry.addData("Movement Y: ", robotMovementY);
             telemetry.addData("Rotation Correction: ", pivotCorrection);

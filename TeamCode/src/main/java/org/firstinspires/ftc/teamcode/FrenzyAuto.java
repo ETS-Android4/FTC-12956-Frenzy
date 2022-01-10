@@ -329,7 +329,7 @@ public class FrenzyAuto extends LinearOpMode {
             double robotMovementX = calculateX(robotMovementAngle, power);
             double robotMovementY = calculateY(robotMovementAngle, power);
             double pivotCorrection = targetOrientation - globalPositionUpdate.returnOrientation();
-            double pivotPower = pivotCorrection / 90;
+            double pivotPower = (pivotCorrection / 180) * 0.5;
             if(pivotCorrection >= 90) {
                 pivotPower = 0.5;
             }
