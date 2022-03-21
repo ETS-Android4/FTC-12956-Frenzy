@@ -101,5 +101,7 @@ public class FrenzyTeleOp extends OpMode {
         frontRight.setPower(0);
         rearRight.setPower(0);
         intake.setPower(0);
+        carouselMover.setPower(0);
+        liftSpool.setPower(0);
     }
 }

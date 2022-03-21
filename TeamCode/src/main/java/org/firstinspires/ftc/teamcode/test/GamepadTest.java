@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * Created by Owen Bachyrycz on 3/17/2022.
+ * Displays gamepad joystick readings in telemetry
  */
 
 @TeleOp(name="GamepadTest", group="default")
