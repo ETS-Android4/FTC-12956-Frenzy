@@ -85,6 +85,12 @@ public class FrenzyTeleOp extends OpMode {
         } else {
             liftSpool.setPower(0);
         }
+
+        if(gamepad1.y) {
+            intake.setPower(1);
+        } else {
+            intake.setPower(0);
+        }
     }
 
     @Override
