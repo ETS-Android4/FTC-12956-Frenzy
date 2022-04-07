@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Owen Bachyrycz on 12/1/2021.
@@ -22,6 +23,7 @@ public class FrenzyTeleOp extends OpMode {
     DcMotor carouselMover;
     DcMotor liftSpool;
     DcMotor intake;
+    Servo carriage;
 
     //The power each motor should be set to
     double frontLeftPower;
@@ -78,6 +80,14 @@ public class FrenzyTeleOp extends OpMode {
             carouselMover.setPower(0);
         }
 
+        if(gamepad1.left_bumper){
+            carriage.setPosition(0.75);
+        } else if(gamepad1.right_bumper){
+            carriage.setPosition(0.25);
+        } else {
+            carriage.setPosition(0.5);
+        }
+
         if(gamepad1.left_trigger > 0) {
             liftSpool.setPower(-(gamepad1.left_trigger / 2));
         } else if(gamepad1.right_trigger > 0) {
@@ -88,6 +98,8 @@ public class FrenzyTeleOp extends OpMode {
 
         if(gamepad1.y) {
             intake.setPower(1);
+        } else if(gamepad1.x){
+            intake.setPower(-1);
         } else {
             intake.setPower(0);
         }
